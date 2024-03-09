@@ -1,30 +1,66 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const emailref = useRef('');
+  const passwordref = useRef('');
+  const [isLogin, setIsLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
 
+  const authenticationHandler = async(e) => {
+    try{
+      e.preventDefault();
+      setIsLoading(true);
+      const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword': 'signUp'}?key=AIzaSyDgVNgrmcZxsz-Kiut7ZtJ_AeTUP-Z1iPA`,{
+        method: 'POST',
+        body: JSON.stringify({
+          email: emailref.current.value,
+          password: passwordref.current.value,
+          returnSecureToken: true,
+        }),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      });
+      const resData = await res.json();
+      if(!res.ok){
+        throw new Error(resData.error.message);
+      }
+
+      alert(`${isLogin ? 'User account has been created, Kindly sign-in below' : 'User sign in successful'}`);
+      passwordref.current.value='';
+      setIsLogin(true);
+    }
+    catch(err){
+      console.log(err.message); 
+      alert(err.message);
+    }
+    finally{
+      setIsLoading(false);
+    }
+
+  }
+
+
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
-      <form >
+      <form onSubmit={(e)=>authenticationHandler(e)}>
         <div className={classes.control}>
           <label htmlFor='email'>Your Email</label>
-          <input type='email' id='email' required />
+          <input type='email' id='email' ref={emailref} required />
         </div>
         <div className={classes.control}>
           <label htmlFor='password'>Your Password</label>
-          <input
-            type='password'
-            id='password'
-            required
-          />
+          <input type='password' id='password' ref={passwordref} required/>
         </div>
+        { isLoading && <div className={classes.reqMsg}>Sending requests...</div>}
+        {!isLoading && <div><button type='submit' className={classes.authBtn}>{isLogin ? 'Signin' : 'Signup'}</button></div>}
         <div className={classes.actions}>
           <button
             type='button'

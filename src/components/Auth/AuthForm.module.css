@@ -70,3 +70,19 @@
   background-color: transparent;
   color: #ae82cc;
 }
+
+.reqMsg{
+  color: white;
+  font-size: medium;
+}
+
+.authBtn{
+  padding: 0.5rem 1.5rem; 
+  font-size: small;
+  font-weight: 700;
+  border-radius: 4px;
+  background-color: #b37edf;
+  color: white;
+  border: none;
+  margin-top: 1.5rem;
+}
