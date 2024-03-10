@@ -1,12 +1,18 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 import classes from './AuthForm.module.css';
+import AuthContext from '../../contexts/auth-context';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 
 const AuthForm = () => {
   const emailref = useRef('');
   const passwordref = useRef('');
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const history = useHistory();
+
+  const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -32,9 +38,10 @@ const AuthForm = () => {
         throw new Error(resData.error.message);
       }
 
-      alert(`${isLogin ? 'User account has been created, Kindly sign-in below' : 'User sign in successful'}`);
+      authCtx.addToken(resData.idToken);
+      alert(`${isLogin ? 'User sign in successful' : 'User sign up successful'}`);
       passwordref.current.value='';
-      setIsLogin(true);
+      history.push('/profile');
     }
     catch(err){
       console.log(err.message); 
