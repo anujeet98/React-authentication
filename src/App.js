@@ -10,18 +10,20 @@ import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 function App() {
   const authCtx = useContext(AuthContext);
+  console.log(authCtx, 'routes');
   return (
     <Layout>
       <Switch>
+        {console.log(authCtx)}
         <Route path='/' exact>
           <HomePage />
         </Route>
-        {
-          !authCtx.authToken && <Route path='/auth'><AuthPage /></Route>
-        }
-        {
-          authCtx.authToken ? <Route path='/profile'><UserProfile /></Route> : <Redirect to='/auth'/>
-        }
+        <Route path='/auth'> 
+          {!authCtx.authToken ? <AuthPage /> : <Redirect to='/'/>}
+        </Route>
+        <Route path='/profile'> 
+          {authCtx.authToken ? <UserProfile /> : <Redirect to='/auth'/>}
+        </Route>
         <Route path='*'>
           <Redirect to='/auth'/>
         </Route>

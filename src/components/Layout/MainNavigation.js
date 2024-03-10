@@ -9,10 +9,12 @@ const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const history = useHistory();
 
-const logoutHandler = () => {
-  authCtx.deleteToken();
-  history.push('/auth');
-}
+  const logoutHandler = () => {
+    authCtx.deleteToken();
+    localStorage.removeItem('reactAuthToken')
+    history.push('/auth');
+  }
+  console.log(authCtx, 'nav bar');
 
   return (
     <header className={classes.header}>
@@ -27,7 +29,8 @@ const logoutHandler = () => {
             <li>
               <Link to='/auth'>Login</Link>
             </li>
-            </Fragment>:
+            </Fragment>
+            :
             <Fragment>
               <li>
                 <Link to='/profile'>Profile</Link>
