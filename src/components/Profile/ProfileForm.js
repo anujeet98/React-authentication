@@ -10,7 +10,7 @@ const ProfileForm = () => {
   const resetRequest = async () => {
     try{
       setIsLoading(true);
-      const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=',{
+      const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDgVNgrmcZxsz-Kiut7ZtJ_AeTUP-Z1iPA',{
         method: 'POST',
         body: JSON.stringify({
           idToken: authCtx.authToken,
