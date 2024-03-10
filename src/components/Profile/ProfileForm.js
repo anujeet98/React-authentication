@@ -1,16 +1,18 @@
 import { useContext, useRef, useState } from 'react';
 import classes from './ProfileForm.module.css';
 import AuthContext from '../../contexts/auth-context';
+const FIREBASEKEY=process.env.REACT_APP_FIREBASE_KEY;
 
 const ProfileForm = () => {
   const passwordref = useRef('');
   const [isLoading, setIsLoading] = useState(false);
   const authCtx = useContext(AuthContext);
 
+
   const resetRequest = async () => {
     try{
       setIsLoading(true);
-      const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDgVNgrmcZxsz-Kiut7ZtJ_AeTUP-Z1iPA',{
+      const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${FIREBASEKEY}`,{
         method: 'POST',
         body: JSON.stringify({
           idToken: authCtx.authToken,

@@ -3,6 +3,7 @@ import { useContext, useRef, useState } from 'react';
 import classes from './AuthForm.module.css';
 import AuthContext from '../../contexts/auth-context';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+const FIREBASEKEY = process.env.REACT_APP_FIREBASE_KEY;
 
 const AuthForm = () => {
   const emailref = useRef('');
@@ -22,7 +23,7 @@ const AuthForm = () => {
     try{
       e.preventDefault();
       setIsLoading(true);
-      const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword': 'signUp'}?key=AIzaSyDgVNgrmcZxsz-Kiut7ZtJ_AeTUP-Z1iPA`,{
+      const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword': 'signUp'}?key=${FIREBASEKEY}`,{
         method: 'POST',
         body: JSON.stringify({
           email: emailref.current.value,
@@ -38,7 +39,7 @@ const AuthForm = () => {
         throw new Error(resData.error.message);
       }
 
-      authCtx.addToken(resData.idToken);
+      authCtx.addToken(resData.idToken, resData.expiresIn);
       alert(`${isLogin ? 'User sign in successful' : 'User sign up successful'}`);
       passwordref.current.value='';
       history.push('/profile');

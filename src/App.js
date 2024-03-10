@@ -10,11 +10,9 @@ import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 function App() {
   const authCtx = useContext(AuthContext);
-  console.log(authCtx, 'routes');
   return (
     <Layout>
       <Switch>
-        {console.log(authCtx)}
         <Route path='/' exact>
           <HomePage />
         </Route>

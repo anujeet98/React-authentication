@@ -1,25 +1,33 @@
 import { useEffect, useState } from "react"
 import AuthContext from "./auth-context"
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 const AuthProvider = (props) => {
-    const [token, setToken] = useState(null);
-    useEffect(()=>{
-        const lsToken = localStorage.getItem('reactAuthToken');
-        if(lsToken)
-            setToken(lsToken);
-    },[]);
-    useEffect(()=>{
-        if(token)
-            localStorage.setItem('reactAuthToken',token);
-    },[token]);
+    const initialToken = localStorage.getItem('reactAuthToken');
+    const [token, setToken] = useState(initialToken);
+    const history = useHistory();
 
-    const addTokenHandler = (newToken) => {
+    useEffect(()=>{
+        const expiryTime = localStorage.getItem('reactAuthToken-expiresIn');
+        if(expiryTime && expiryTime<new Date().getTime())
+        {
+            deleteTokenHandler();
+            alert('token expired, kindly login again');
+            history.push('/auth');
+        }
+    });
+
+    const addTokenHandler = (newToken, expiresIn) => {
+        const date = new Date().getTime()+(expiresIn*1000);
+        localStorage.setItem('reactAuthToken-expiresIn',date);
+        localStorage.setItem('reactAuthToken',newToken);
         setToken(newToken);
     }
 
     const deleteTokenHandler = () => {
         localStorage.removeItem('reactAuthToken');
+        localStorage.removeItem('reactAuthToken-expiresIn');
         setToken(null);
     }
 

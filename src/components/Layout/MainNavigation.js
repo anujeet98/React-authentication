@@ -14,7 +14,6 @@ const MainNavigation = () => {
     localStorage.removeItem('reactAuthToken')
     history.push('/auth');
   }
-  console.log(authCtx, 'nav bar');
 
   return (
     <header className={classes.header}>
