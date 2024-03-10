@@ -22,7 +22,7 @@ const AuthForm = () => {
     try{
       e.preventDefault();
       setIsLoading(true);
-      const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword': 'signUp'}?key=AIzaSyDgVNgrmcZxsz-Kiut7ZtJ_AeTUP-Z1iPA`,{
+      const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword': 'signUp'}?key=`,{
         method: 'POST',
         body: JSON.stringify({
           email: emailref.current.value,
